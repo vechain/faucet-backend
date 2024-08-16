@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import BigNumber from 'bignumber.js'
 import * as path from 'path';
-import { logger } from '../utils/logger'
 import { secp256k1 } from "thor-devkit/dist/secp256k1";
 import { address } from "thor-devkit/dist/address";
 import { Address } from "thor-model-kit";
