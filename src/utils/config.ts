@@ -1,8 +1,7 @@
 import * as fs from "fs";
 import BigNumber from 'bignumber.js'
 import * as path from 'path';
-import { secp256k1 } from "thor-devkit/dist/secp256k1";
-import { address } from "thor-devkit/dist/address";
+import { secp256k1, address } from "thor-devkit";
 import { Address } from "thor-model-kit";
 
 enum CHAIN_TAG {

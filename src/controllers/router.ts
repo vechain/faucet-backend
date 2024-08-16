@@ -3,8 +3,7 @@ import Cert from '../utils/cert'
 import TransactionService from './transaction-service'
 import RecapchaService from './recapcha-service'
 import Validator from '../utils/validator'
-import { blake2b256 } from 'thor-devkit/dist/blake2b'
-import { Certificate } from 'thor-devkit'
+import { Certificate, blake2b256 } from 'thor-devkit'
 import { reportLogger } from '../utils/logger'
 
 interface Annex {
