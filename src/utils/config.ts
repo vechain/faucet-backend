@@ -1,8 +1,7 @@
 import * as fs from "fs";
 import BigNumber from 'bignumber.js'
 import * as path from 'path';
-import { logger } from '../utils/logger'
-import { secp256k1, publicKeyToAddress } from "thor-devkit/dist/cry";
+import { secp256k1, address } from "thor-devkit";
 import { Address } from "thor-model-kit";
 
 enum CHAIN_TAG {
@@ -42,7 +41,7 @@ export default class Config {
             throw new Error("chain tag: invalid chain tag " + this.chainTag)
         }
         let pubKey = secp256k1.derivePublicKey(Buffer.from(this.privateKey.slice(2), "hex"))
-        this.addr = Address.fromHex('0x' + publicKeyToAddress(pubKey).toString("hex"))
+        this.addr = Address.fromHex(address.fromPublicKey(pubKey))
         let big18 = new BigNumber("1000000000000000000")
         this.vet = new BigNumber(opt.vet).multipliedBy(big18)
         this.thor = new BigNumber(opt.thor).multipliedBy(big18)
