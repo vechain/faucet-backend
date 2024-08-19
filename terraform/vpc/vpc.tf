@@ -10,7 +10,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    key                  = "facet-app/facet-app-prodvpc.tfstate"
+    key                  = "faucet-app/faucet-app-prodvpc.tfstate"
     region               = "eu-west-1"
     workspace_key_prefix = "workspaces"
   }
@@ -21,7 +21,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "v4.0.1"
   cidr    = local.env.vpc_cidr
-  name    = "facet-app-vpc"
+  name    = "faucet-app-vpc"
   azs     = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
   # Compact subnetting up to 4 AZs, by up to 4 subnets by x/24 cidr blocks neatly fits in /20 172.31.0.0/16 fits 16 of them
   # AZ's are offset by 4 with subnets if each AZ sequential neighbours

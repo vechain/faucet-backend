@@ -1,13 +1,12 @@
 #cloudfront parameters
-project               : evearn
+project               : faucet-app
 environment           : prod
 app_name              : be
 thor_url              : https://mainnet.vechain.org
-frontend_domain       : evearn.io
 
 # route53 parameters
 vpc_cidr              : 172.32.0.0/16
-create_cert           : false #cert created by s3 hosting module
+
 public_subnets        :
                         - 172.32.0.0/20
                         - 172.32.16.0/20
@@ -23,13 +22,7 @@ database_subnets      :
 
 # ECS parameters
 region                : eu-west-1
-vpc_name              : prod-evearn-vpc
 
 image_tag             : latest
 cpu                   : 1024
 memory                : 2048
-
-# Backend environment variables
-X2EARNREWARDS_CONTRACT_ADDRESS                   : '0x6Bee7DDab6c99d5B2Af0554EaEA484CE18F52631'
-NEXT_PUBLIC_B3TR_CONTRACT_ADDRESS                : '0x6Bee7DDab6c99d5B2Af0554EaEA484CE18F52631'
-NEXT_PUBLIC_X2EARN_REWARDS_POOL_CONTRACT_ADDRESS : '0x6Bee7DDab6c99d5B2Af0554EaEA484CE18F52631'
