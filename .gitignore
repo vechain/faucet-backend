@@ -65,5 +65,6 @@ package-lock.json
 out/
 build
 
-.terraform
+### Terraform ###
+.terraform/
 .terraform.lock.hcl
