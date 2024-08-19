@@ -1,0 +1,28 @@
+#cloudfront parameters
+project               : faucet-app
+environment           : prod
+app_name              : be
+thor_url              : https://mainnet.vechain.org
+
+# route53 parameters
+vpc_cidr              : 172.32.0.0/16
+
+public_subnets        :
+                        - 172.32.0.0/20
+                        - 172.32.16.0/20
+                        - 172.32.32.0/20
+private_subnets       :
+                        - 172.32.48.0/20
+                        - 172.32.64.0/20
+                        - 172.32.80.0/20
+database_subnets      :
+                        - 172.32.96.0/20
+                        - 172.32.112.0/20
+                        - 172.32.128.0/20
+
+# ECS parameters
+region                : eu-west-1
+
+image_tag             : latest
+cpu                   : 1024
+memory                : 2048
