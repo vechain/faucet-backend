@@ -1,3 +1,10 @@
+data "aws_ssm_parameter" "private_key" {
+  name = "/${local.env.environment}/${local.env.project}/private_key"
+}
+data "aws_ssm_parameter" "recaptcha_secret_key" {
+  name = "/${local.env.environment}/${local.env.project}/recaptcha_secret_key"
+}
+
 variable "runtime_platform" {
   type = list(object({
     operating_system_family = string
@@ -159,6 +166,27 @@ module "ecs-lb-service-faucet-be" {
   namespace_id               = module.namespace.namespace_id
   https_tg_healthcheck_path  = "/api"
   environment_variables = [
+    {
+      "NODE_ENV": "production"
+    },
+    {
+      "PRIV_KEY": data.aws_ssm_parameter.private_key.value
+    },
+    {
+      "CHAIN_TAG": "0x27"    
+    },
+    {
+      "FAUCET_PORT": "8080"
+    },
+    {
+      "RECAPCHA_SECRET_KEY": data.aws_ssm_parameter.recaptcha_secret_key.value
+    },
+    {
+      "FAUCET_CORS": "faucet.vecha.in"
+    },
+    {
+      "REVERSE_PROXY": "yes"
+  },
   ]
   log_metric_filters = [
     {
