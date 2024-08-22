@@ -70,4 +70,9 @@ router.post("/requests", async (ctx) => {
     reportLogger.info(`IP=${remoteAddr} Address=${signer} Score=${score}`)
 })
 
+// Health check endpoint
+router.get("/health", async (ctx) => {
+    ctx.body = "OK"
+})
+
 export default router
