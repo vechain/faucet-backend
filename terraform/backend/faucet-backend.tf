@@ -164,28 +164,35 @@ module "ecs-lb-service-faucet-be" {
   alb_sg                     = [module.alb-sg.security_group_id]
   enable_deletion_protection = true
   namespace_id               = module.namespace.namespace_id
-  https_tg_healthcheck_path  = "/api"
+  https_tg_healthcheck_path  = "/requests"
   environment_variables = [
     {
-      "NODE_ENV": "production"
+      "name": "NODE_ENV"
+      "value": "production"
     },
     {
-      "PRIV_KEY": data.aws_ssm_parameter.private_key.value
+      "name": "PRIV_KEY"
+      "value": data.aws_ssm_parameter.private_key.value
     },
     {
-      "CHAIN_TAG": "0x27"    
+      "name": "CHAIN_TAG"
+      "value": "0x27"    
     },
     {
-      "FAUCET_PORT": "8080"
+      "name": "FAUCET_PORT"
+      "value": "8080"
     },
     {
-      "RECAPCHA_SECRET_KEY": data.aws_ssm_parameter.recaptcha_secret_key.value
+      "name": "RECAPCHA_SECRET_KEY"
+      "value": data.aws_ssm_parameter.recaptcha_secret_key.value
     },
     {
-      "FAUCET_CORS": "faucet.vecha.in"
+      "name": "FAUCET_CORS"
+      "value": "faucet.vecha.in"
     },
     {
-      "REVERSE_PROXY": "yes"
+      "name": "REVERSE_PROXY"
+      "value": "yes"
   },
   ]
   log_metric_filters = [
