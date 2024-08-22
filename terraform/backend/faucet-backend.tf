@@ -1,3 +1,10 @@
+data "aws_ssm_parameter" "private_key" {
+  name = "/${local.env.environment}/${local.env.project}/private_key"
+}
+data "aws_ssm_parameter" "recaptcha_secret_key" {
+  name = "/${local.env.environment}/${local.env.project}/recaptcha_secret_key"
+}
+
 variable "runtime_platform" {
   type = list(object({
     operating_system_family = string
@@ -50,14 +57,6 @@ module "alb-sg" {
       ipv6_cidr_blocks = []
       security_groups  = []
     },
-    {
-      description      = "Allow Dynamodb TCP traffic"
-      from_port        = 8000
-      to_port          = 8000
-      protocol         = "tcp"
-      cidr_blocks      = [local.env.vpc_cidr]
-      ipv6_cidr_blocks = []
-    }
   ]
 
   egress_rules = [
@@ -84,28 +83,18 @@ module "ecs-sg" {
 
   ingress_rules = [
     {
-      description      = "Allow Dynamodb traffic"
+      description      = "Allow HTTP traffic from LB"
       from_port        = 8000
       to_port          = 8000
       protocol         = "tcp"
       cidr_blocks      = [local.env.vpc_cidr]
       ipv6_cidr_blocks = []
-      security_groups  = []
-    },
-    {
-      description      = "Allow HTTP traffic"
-      from_port        = 80
-      to_port          = 80
-      protocol         = "tcp"
-      cidr_blocks      = [local.env.vpc_cidr]
-      ipv6_cidr_blocks = []
-      security_groups  = []
     }
   ]
 
   egress_rules = [
     {
-      description      = "Allow Oubound PostgreSQL traffic"
+      description      = "Allow all traffic"
       from_port        = 0
       to_port          = 0
       protocol         = "-1"
@@ -113,7 +102,6 @@ module "ecs-sg" {
       ipv6_cidr_blocks = []
     }
   ]
-
 }
 
 # ECS cluster for backend service
@@ -149,7 +137,8 @@ module "ecs-lb-service-faucet-be" {
   cpu                        = local.env.cpu
   memory                     = local.env.memory
   cidr                       = local.env.vpc_cidr
-  container_port             = 8080
+  container_port             = 8000
+  https_tg_port              = 8000
   runtime_platform           = var.runtime_platform
   certificate_arn            = module.faucet-domains.certificate_arn
   ecs_sg                     = [module.ecs-sg.security_group_id]
@@ -157,8 +146,36 @@ module "ecs-lb-service-faucet-be" {
   alb_sg                     = [module.alb-sg.security_group_id]
   enable_deletion_protection = true
   namespace_id               = module.namespace.namespace_id
-  https_tg_healthcheck_path  = "/api"
+  https_tg_healthcheck_path  = "/health"
   environment_variables = [
+    {
+      "name": "NODE_ENV"
+      "value": "production"
+    },
+    {
+      "name": "PRIV_KEY"
+      "value": data.aws_ssm_parameter.private_key.value
+    },
+    {
+      "name": "CHAIN_TAG"
+      "value": "0x27"    
+    },
+    {
+      "name": "FAUCET_PORT"
+      "value": "8000"
+    },
+    {
+      "name": "RECAPCHA_SECRET_KEY"
+      "value": data.aws_ssm_parameter.recaptcha_secret_key.value
+    },
+    {
+      "name": "FAUCET_CORS"
+      "value": "faucet.vecha.in"
+    },
+    {
+      "name": "REVERSE_PROXY"
+      "value": "yes"
+  },
   ]
   log_metric_filters = [
     {

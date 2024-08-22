@@ -7,6 +7,6 @@ RUN yarn install --frozen-lockfile
 RUN yarn build
 
 # Expose the port that the application listens on.
-EXPOSE 8080
+EXPOSE 8000
 
 CMD yarn start
