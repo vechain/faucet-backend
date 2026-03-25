@@ -40,7 +40,7 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "sqlite3": "^5.1.7",
-    "thor-devkit": "^2.0.9",
+    "thor-devkit": "^2.2.0",
     "thor-model-kit": "^0.3.1"
   }
 }
